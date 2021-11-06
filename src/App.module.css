@@ -1,0 +1,19 @@
+.App {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonPanel {
+  display: flex;
+  width: 400px;
+  padding: 50px;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.button {
+  font-size: 60px;
+}
