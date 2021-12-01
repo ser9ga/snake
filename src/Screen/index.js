@@ -1,33 +1,25 @@
 import { memo } from "react";
+import Square from "../Square";
 import styles from './Screen.module.css';
 
-const Screen = ({ presentScreenState }) => {
-
-
-    const square = (isFilled, rowItemIdx) => (
-        <div key={rowItemIdx} className={styles.squareWrapper}>
-            <div className={`${styles.square} ${isFilled && styles.filledSquare}`} >
-                <div className={`${styles.innerSquare} ${isFilled && styles.filledInnerSquare}`} />
-            </div>
-        </div>
-    );
-
+const Screen = ({ screen, fieldSize }) => {
     return (
         <div className={styles.screen}>
-            {
-                presentScreenState.map((row, rowIdx) =>
-                    <div key={rowIdx} className={styles.rowLine}>
+            <div className={styles.screenFrame}>
+                {[...Array(fieldSize.y)].map((row, rowIdY) => (
+                    <div key={rowIdY} className={styles.rowLine}>
                         {
-                            row.map((rowItem, rowItemIdx) => {
-                                    return (
-                                        square(rowItem.isFilled, rowItemIdx)
-                                    )
-                                }
-                            )
+                            [...Array(fieldSize.x)].map((rowItem, rowIdX) => {
+                                const currentSquareIndex = fieldSize.x * rowIdY + rowIdX;
+                                return (
+                                    <Square key={`${rowIdX}_${rowIdY}`} isFilled={screen[currentSquareIndex].isFilled} />
+                                )
+                            })
                         }
                     </div>
-                )
-            }
+                ))
+                }
+            </div>
         </div>
     );
 }

@@ -8,39 +8,16 @@
 .screen {
   background: #8FBC8F;
   padding: 20px;
-  border-radius: 30px ;
+  border-radius: 30px;
+}
+
+.screenFrame {
+  width: 100%;
+  height: 100%;
+  border: 3px;
 }
 
 .rowLine {
-  display: inline-block;
-  /*background: white;*/
-}
-
-.squareWrapper {
-  width: 10px;
+  display: block;
   height: 10px;
-  padding: 0.5px;
 }
-
-.square {
-  width: 100%;
-  height: 100%;
-  border: #90A090 1px solid;
-  padding: 1px;
-}
-
-.filledSquare {
-  border: #222 1px solid;
-}
-
-.innerSquare {
-  width: 100%;
-  height: 100%;
-  background: #90A090;
-  padding: 1px;
-}
-
-.filledInnerSquare {
-  background: #222;
-}
-

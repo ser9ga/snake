@@ -1,0 +1,29 @@
+.squareWrapper {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  padding: 0.5px;
+}
+
+.square {
+  width: 100%;
+  height: 100%;
+  border: #90A090 1px solid;
+  padding: 1px;
+}
+
+.filledSquare {
+  border: #222 1px solid;
+}
+
+.innerSquare {
+  width: 100%;
+  height: 100%;
+  background: #90A090;
+  padding: 1px;
+}
+
+.filledInnerSquare {
+  background: #222;
+}
+

@@ -1,27 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 
-const GameControl = getNextDirection => {
-
-    const [nextDirection, setNextDirection] = useState('right')
-
-    const keyPressHandler = e => {
-        console.log('code: ', e.code)
-        const direction = {
-            ArrowLeft: 'left',
-            ArrowRight: 'right',
-            ArrowUp: 'up',
-            ArrowDown: 'down',
-            KeyA: 'left',
-            KeyD: 'right',
-            KeyW: 'up',
-            KeyS: 'down'
-        }[e.key]
-        setNextDirection(direction)
-    }
+const GameControl = ({ keyPressHandler }) => {
+    const handler = event => keyPressHandler(event);
 
     useEffect(() => {
-        document.addEventListener('keydown', e => keyPressHandler(e));
-    });
+        document.addEventListener('keydown', handler);
+
+        return () => {
+            document.removeEventListener('keydown', handler);
+        };
+    }, []);
+
+    return <div/>;
 };
 
 export default GameControl;
