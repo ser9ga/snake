@@ -1,0 +1,23 @@
+.App {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.screen {
+  background: #8FBC8F;
+  padding: 20px;
+  border-radius: 30px;
+}
+
+.screenFrame {
+  width: 100%;
+  height: 100%;
+  border: 3px;
+}
+
+.rowLine {
+  display: block;
+  height: 10px;
+}
