@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
-const GameControl = ({ keyPressHandler }) => {
+export const useGameControl = (keyPressHandler) => {
     const handler = event => keyPressHandler(event);
 
     useEffect(() => {
@@ -10,8 +10,4 @@ const GameControl = ({ keyPressHandler }) => {
             document.removeEventListener('keydown', handler);
         };
     }, []);
-
-    return <div/>;
 };
-
-export default GameControl;

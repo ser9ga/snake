@@ -1,14 +1,8 @@
-import {
-    useRef,
-    useReducer,
-    useEffect,
-    useMemo
-} from "react";
+import { useMemo, useReducer } from "react";
+import { TypeEnum } from "../dictionaries/TypeEnum";
 
-const useLogic = () => {
-    let intervalRef = useRef();
-
-    const fieldSize = useMemo(() => ({ x: 20, y: 20}), []);
+export const useLogic = () => {
+    const fieldSize = useMemo(() => ({x: 20, y: 20}), []);
 
     const initSnakeBody = [...Array(4)]
         .map((_, index) => ({
@@ -31,7 +25,7 @@ const useLogic = () => {
     const initFieldChanges = useMemo(() => {
         return generateInitField.reduce((acc, el) => {
             if (el.x === 0 || el.x === fieldSize.x - 1 || el.y === 0 || el.y === fieldSize.y - 1) {
-                return acc.concat({ ...el, isFilled: true });
+                return acc.concat({...el, isFilled: true});
             }
 
             return acc;
@@ -53,8 +47,8 @@ const useLogic = () => {
         isGameOver: false,
         body: [...initSnakeBody],
         screen: prepareNewScreenState(generateInitField, initFieldChanges),
-        currentDirection: { dir: 'forward', ax: 'horizontal' },
-        nextDirection: { dir: 'forward', ax: 'horizontal' }
+        currentDirection: {dir: 'forward', ax: 'horizontal'},
+        nextDirection: {dir: 'forward', ax: 'horizontal'}
     };
 
     const getSnakeParams = state => {
@@ -98,17 +92,17 @@ const useLogic = () => {
     };
 
     const setTargetPixel = state => {
-        const { newHead } = getSnakeParams(state);
+        const {newHead} = getSnakeParams(state);
         const newTarget = getNextTarget(
             state.screen, [...initSnakeBody, newHead]
         );
         const newScreenState = prepareNewScreenState(state.screen, [newTarget]);
 
-        return { screen: newScreenState };
+        return {screen: newScreenState};
     };
 
     const snakeStateReducer = (state, action) => {
-        if (action.type === 'prepareAndExecNewTurn') {
+        if (action.type === TypeEnum.prepareAndExecNewTurn) {
             const {
                 filteredBodyState,
                 direction,
@@ -116,7 +110,7 @@ const useLogic = () => {
                 newHead
             } = getSnakeParams(state);
 
-            const nextHeadPlace = {...state.screen[fieldSize.x * newHead.y + newHead.x]};
+            const nextHeadPlace = { ...state.screen[fieldSize.x * newHead.y + newHead.x] };
 
             if (nextHeadPlace.isFilled && !nextHeadPlace.isTarget) {
                 return {
@@ -124,25 +118,30 @@ const useLogic = () => {
                     isGameRunning: false,
                     isMatchIsOn: false,
                     isGameOver: true,
-                    currentDirection: { dir: 'forward', ax: 'horizontal' },
-                    nextDirection: { dir: 'forward', ax: 'horizontal' }
+                    currentDirection: {dir: 'forward', ax: 'horizontal'},
+                    nextDirection: {dir: 'forward', ax: 'horizontal'}
                 }
             }
 
             let newSnakeBodyState = [...filteredBodyState];
 
             if (nextHeadPlace.isTarget) {
-                newSnakeBodyState.splice(1, 0, { ...newSnakeBodyState[0], isFilled: false });
+                newSnakeBodyState.splice(1, 0, {...newSnakeBodyState[0], isFilled: false});
             }
 
             newSnakeBodyState = newSnakeBodyState
-                .map((pix, idx) => idx === 0 ? { ...pix, isFilled: false} : pix)
+                .map((pix, idx) => idx === 0
+                    ? { ...pix, isFilled: false }
+                    : pix)
                 .concat(newHead);
 
             let newScreenState = prepareNewScreenState(state.screen, newSnakeBodyState);
 
             if (nextHeadPlace.isTarget) {
-                newScreenState = prepareNewScreenState(newScreenState, [getNextTarget(newScreenState, [cutTail])]);
+                newScreenState = prepareNewScreenState(
+                    newScreenState,
+                    [getNextTarget(newScreenState, [cutTail])]
+                );
             }
 
             const newDirection = state[direction];
@@ -155,29 +154,30 @@ const useLogic = () => {
             };
         }
 
-        if (action.type ==='keyPressHandler') {
+        if (action.type === TypeEnum.keyPressHandler) {
             action.payload.preventDefault();
             const direction = {
-                ArrowLeft: { dir: 'backward', ax: 'horizontal' },
-                ArrowRight: { dir: 'forward', ax: 'horizontal' },
-                ArrowUp: { dir: 'backward', ax: 'vertical' },
-                ArrowDown: { dir: 'forward', ax: 'vertical' },
-                KeyA: { dir: 'backward', ax: 'horizontal' },
-                KeyD: { dir: 'forward', ax: 'horizontal' },
-                KeyW: { dir: 'backward', ax: 'vertical' },
-                KeyS: { dir: 'forward', ax: 'vertical' }
+                ArrowLeft: {dir: 'backward', ax: 'horizontal'},
+                ArrowRight: {dir: 'forward', ax: 'horizontal'},
+                ArrowUp: {dir: 'backward', ax: 'vertical'},
+                ArrowDown: {dir: 'forward', ax: 'vertical'},
+                KeyA: {dir: 'backward', ax: 'horizontal'},
+                KeyD: {dir: 'forward', ax: 'horizontal'},
+                KeyW: {dir: 'backward', ax: 'vertical'},
+                KeyS: {dir: 'forward', ax: 'vertical'}
             }[action.payload.code];
 
-            if (!(state.nextDirection.dir ===  direction?.dir && state.nextDirection.ax ===  direction?.ax) &&
-                direction &&
-                state.isGameRunning) {
-                return { ...state, nextDirection: direction }
+            if (!(state.nextDirection.dir === direction?.dir
+                    && state.nextDirection.ax === direction?.ax)
+                && direction
+                && state.isGameRunning) {
+                return {...state, nextDirection: direction}
             }
 
             return state;
         }
 
-        if (action.type === 'startOrPause') {
+        if (action.type === TypeEnum.startOrPause) {
             const {
                 isGameRunning,
                 isMatchIsOn,
@@ -191,7 +191,9 @@ const useLogic = () => {
                 isGameOver: false,
                 isMatchIsOn: true,
                 isGameRunning: !isGameRunning,
-                screen: !isMatchIsOn ? prepareNewScreenState(generateInitField, [...initFieldChanges, ...initSnakeBody]) : screen,
+                screen: !isMatchIsOn ?
+                    prepareNewScreenState(generateInitField, [...initFieldChanges, ...initSnakeBody])
+                    : screen,
                 body: isGameOver ? [...initSnakeState.body] : body,
             }
 
@@ -201,8 +203,8 @@ const useLogic = () => {
             }
         }
 
-        if (action.type === 'resetHandler') {
-            const { restartFlag, isGameRunning, isMatchIsOn, isGameOver } = state;
+        if (action.type === TypeEnum.resetHandler) {
+            const {restartFlag, isGameRunning, isMatchIsOn, isGameOver} = state;
             const setParams = {
                 isGameRunning: !isMatchIsOn && isGameOver ? true : isGameRunning,
                 isMatchIsOn: !restartFlag ? isGameOver : true
@@ -226,7 +228,7 @@ const useLogic = () => {
             };
         }
 
-        if (action.type === 'stopInterval') {
+        if (action.type === TypeEnum.stopInterval) {
             return {
                 ...state,
                 restartFlag: state.isGameRunning || state.isGameOver,
@@ -234,7 +236,7 @@ const useLogic = () => {
             }
         }
 
-        if (action.type === 'startInterval') {
+        if (action.type === TypeEnum.startInterval) {
             return {
                 ...state,
                 restartFlag: false,
@@ -247,17 +249,17 @@ const useLogic = () => {
 
     const [snakeState, dispatchSnakeState] = useReducer(snakeStateReducer, initSnakeState);
 
-    const resetGame = async() => {
-        await dispatchSnakeState({
-            type: 'stopInterval'
+    const resetGame = () => {
+        dispatchSnakeState({
+            type: TypeEnum.stopInterval
         });
 
-        await dispatchSnakeState({
-            type: 'resetHandler'
+        dispatchSnakeState({
+            type: TypeEnum.resetHandler
         });
 
-        await dispatchSnakeState({
-            type: 'startInterval'
+        dispatchSnakeState({
+            type: TypeEnum.startInterval
         });
     };
 
@@ -265,7 +267,7 @@ const useLogic = () => {
         event.preventDefault();
 
         dispatchSnakeState({
-            type: 'keyPressHandler',
+            type: TypeEnum.keyPressHandler,
             payload: event
         });
 
@@ -278,30 +280,18 @@ const useLogic = () => {
         }
     };
 
-    const startOrPauseGame = async () => {
-        await dispatchSnakeState({
-            type: 'startOrPause'
+    const startOrPauseGame = () => {
+        dispatchSnakeState({
+            type: TypeEnum.startOrPause
         })
     };
-
-    useEffect(() => {
-        if(snakeState.isGameRunning) {
-            intervalRef.current = setInterval(() => dispatchSnakeState({ type: 'prepareAndExecNewTurn' }), 200);
-        }
-
-        if (!snakeState.isGameRunning) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-        }
-    }, [snakeState.isGameRunning]);
 
     return {
         fieldSize,
         snakeState,
+        dispatchSnakeState,
         startOrPauseGame,
         resetGame,
         keyPressHandler
     };
 }
-
-export default useLogic;
