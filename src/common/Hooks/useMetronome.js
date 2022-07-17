@@ -1,5 +1,5 @@
 import {useEffect, useRef} from "react";
-import {TypeEnum} from "../dictionaries/TypeEnum";
+import {ActionTypes} from "../dictionaries";
 
 export const useMetronome = (snakeState, dispatchSnakeState) => {
     const intervalRef = useRef();
@@ -7,8 +7,8 @@ export const useMetronome = (snakeState, dispatchSnakeState) => {
     useEffect(() => {
         if (snakeState.isGameRunning) {
             intervalRef.current = setInterval(
-                () => dispatchSnakeState({ type: TypeEnum.prepareAndExecNewTurn }),
-                200
+                () => dispatchSnakeState({ type: ActionTypes.prepareAndExecNewTurn }),
+                150
             );
         }
 

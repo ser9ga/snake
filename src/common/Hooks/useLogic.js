@@ -1,8 +1,8 @@
 import { useMemo, useReducer } from "react";
-import { TypeEnum } from "../dictionaries/TypeEnum";
+import {ActionTypes, DirectionTypes} from "../dictionaries";
 
 export const useLogic = () => {
-    const fieldSize = useMemo(() => ({x: 20, y: 20}), []);
+    const fieldSize = useMemo(() => ({x: 26, y: 18}), []);
 
     const initSnakeBody = [...Array(4)]
         .map((_, index) => ({
@@ -102,7 +102,7 @@ export const useLogic = () => {
     };
 
     const snakeStateReducer = (state, action) => {
-        if (action.type === TypeEnum.prepareAndExecNewTurn) {
+        if (action.type === ActionTypes.prepareAndExecNewTurn) {
             const {
                 filteredBodyState,
                 direction,
@@ -154,30 +154,20 @@ export const useLogic = () => {
             };
         }
 
-        if (action.type === TypeEnum.keyPressHandler) {
-            action.payload.preventDefault();
-            const direction = {
-                ArrowLeft: {dir: 'backward', ax: 'horizontal'},
-                ArrowRight: {dir: 'forward', ax: 'horizontal'},
-                ArrowUp: {dir: 'backward', ax: 'vertical'},
-                ArrowDown: {dir: 'forward', ax: 'vertical'},
-                KeyA: {dir: 'backward', ax: 'horizontal'},
-                KeyD: {dir: 'forward', ax: 'horizontal'},
-                KeyW: {dir: 'backward', ax: 'vertical'},
-                KeyS: {dir: 'forward', ax: 'vertical'}
-            }[action.payload.code];
+        if (action.type === ActionTypes.controlEventHandler) {
+            const directionParams = action.payload;
 
-            if (!(state.nextDirection.dir === direction?.dir
-                    && state.nextDirection.ax === direction?.ax)
-                && direction
+            if (!(state.nextDirection.dir === directionParams?.dir
+                    && state.nextDirection.ax === directionParams?.ax)
+                && directionParams
                 && state.isGameRunning) {
-                return {...state, nextDirection: direction}
+                return {...state, nextDirection: directionParams}
             }
 
             return state;
         }
 
-        if (action.type === TypeEnum.startOrPause) {
+        if (action.type === ActionTypes.startOrPause) {
             const {
                 isGameRunning,
                 isMatchIsOn,
@@ -203,7 +193,7 @@ export const useLogic = () => {
             }
         }
 
-        if (action.type === TypeEnum.resetHandler) {
+        if (action.type === ActionTypes.resetHandler) {
             const {restartFlag, isGameRunning, isMatchIsOn, isGameOver} = state;
             const setParams = {
                 isGameRunning: !isMatchIsOn && isGameOver ? true : isGameRunning,
@@ -228,7 +218,7 @@ export const useLogic = () => {
             };
         }
 
-        if (action.type === TypeEnum.stopInterval) {
+        if (action.type === ActionTypes.stopInterval) {
             return {
                 ...state,
                 restartFlag: state.isGameRunning || state.isGameOver,
@@ -236,7 +226,7 @@ export const useLogic = () => {
             }
         }
 
-        if (action.type === TypeEnum.startInterval) {
+        if (action.type === ActionTypes.startInterval) {
             return {
                 ...state,
                 restartFlag: false,
@@ -251,24 +241,35 @@ export const useLogic = () => {
 
     const resetGame = () => {
         dispatchSnakeState({
-            type: TypeEnum.stopInterval
+            type: ActionTypes.stopInterval
         });
 
         dispatchSnakeState({
-            type: TypeEnum.resetHandler
+            type: ActionTypes.resetHandler
         });
 
         dispatchSnakeState({
-            type: TypeEnum.startInterval
+            type: ActionTypes.startInterval
         });
     };
 
     const keyPressHandler = event => {
         event.preventDefault();
 
+        const directionParams = {
+            ArrowLeft: DirectionTypes.left,
+            ArrowRight: DirectionTypes.right,
+            ArrowUp: DirectionTypes.up,
+            ArrowDown: DirectionTypes.down,
+            KeyA: DirectionTypes.left,
+            KeyD: DirectionTypes.right,
+            KeyW: DirectionTypes.up,
+            KeyS: DirectionTypes.down,
+        }[event.code];
+
         dispatchSnakeState({
-            type: TypeEnum.keyPressHandler,
-            payload: event
+            type: ActionTypes.controlEventHandler,
+            payload: directionParams
         });
 
         if (event.code === 'Space') {
@@ -282,7 +283,7 @@ export const useLogic = () => {
 
     const startOrPauseGame = () => {
         dispatchSnakeState({
-            type: TypeEnum.startOrPause
+            type: ActionTypes.startOrPause
         })
     };
 

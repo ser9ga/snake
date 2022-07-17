@@ -1,19 +1,18 @@
-.App {
-  height: 100vh;
+.container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  height: 100vh;
+
+  background-color: #2b2b30;
 }
 
-.buttonPanel {
-  display: flex;
-  width: 400px;
-  padding: 50px;
-  justify-content: space-around;
-  align-items: center;
+.screenWrap {
+  margin-bottom: 45px;
 }
 
-.button {
-  font-size: 60px;
+.actionButtonsWrapper {
+  margin-bottom: 25px;
 }

@@ -1,0 +1,16 @@
+.buttonPanel {
+  display: flex;
+  width: 350px;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.button {
+  color: #d3b03c;
+  padding: 5px 10px;
+  font-size: 50px;
+  border-radius: 10px;
+  background-color: #2d2d28;
+
+  border: 2px solid #d3b03c;
+}
