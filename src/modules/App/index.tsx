@@ -1,12 +1,14 @@
+import {FC} from "react";
 import Screen from "../Screen";
-import { useLogic } from "../../common/Hooks/useLogic";
-import { useGameControl } from "../../common/Hooks/useGameControl";
+import {useLogic} from "../../common/Hooks/useLogic";
+import {useGameControl} from "../../common/Hooks/useGameControl";
 import {useMetronome} from "../../common/Hooks/useMetronome";
 import Arrows from "../Arrows";
 import ActionButtons from "../ActionButtons";
 import styles from './style.module.css';
+// import Hints from "../Hints";
 
-const App = () => {
+const App: FC = () => {
     const {
         fieldSize,
         snakeState,
@@ -16,8 +18,8 @@ const App = () => {
         keyPressHandler
     } = useLogic();
 
-    useGameControl(keyPressHandler)
-    useMetronome(snakeState, dispatchSnakeState)
+    useGameControl(keyPressHandler);
+    useMetronome(snakeState, dispatchSnakeState);
 
     return (
         <div className={styles.container}>
@@ -39,8 +41,9 @@ const App = () => {
             <Arrows
                 dispatchSnakeState={dispatchSnakeState}
             />
+            {/*<Hints />*/}
         </div>
     );
-}
+};
 
 export default App;
