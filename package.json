@@ -1,14 +1,17 @@
 {
-  "name": "snake-on-vite",
+  "homepage": "https://ser9ga.github.io/snake",
+  "name": "snake",
   "author": "Sergey Korshunov",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
+    "gh-pages": "^3.2.3",
     "clsx": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
