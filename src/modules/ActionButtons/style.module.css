@@ -1,7 +1,7 @@
 .buttonPanel {
   display: flex;
-  width: 350px;
-  justify-content: space-around;
+  width: 300px;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -13,4 +13,10 @@
   background-color: #2d2d28;
 
   border: 2px solid #d3b03c;
+}
+
+.button:active {
+  scale: 0.9;
+
+  transition: scale 0.02s linear;
 }

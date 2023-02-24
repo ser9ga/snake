@@ -37,13 +37,18 @@
 }
 
 .squareButton {
-
     width: 75px;
     height: 75px;
 
     border-radius: 10px;
 
     background: #d3b03c;
+}
+
+.squareButton:active {
+    scale: 0.9;
+
+    transition: scale 0.02s linear;
 }
 
 .triangle {
